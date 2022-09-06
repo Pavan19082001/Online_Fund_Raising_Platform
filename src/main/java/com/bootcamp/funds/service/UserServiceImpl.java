@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.bootcamp.funds.dto.UserDto;
 import com.bootcamp.funds.exceptions.UserNotFoundException;
 import com.bootcamp.funds.model.User;
+import com.bootcamp.funds.repository.UserDao;
 import com.bootcamp.funds.repository.UserRepository;
 
 @Service
@@ -21,12 +22,14 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	ModelMapper modelMapper;
+	
+	@Autowired
+	UserDao dao;
 
 	@Override
 	public UserDto addUser(UserDto dto) {
 		User user = modelMapper.map(dto, User.class);
-		user = repo.save(user);
-		return modelMapper.map(user, UserDto.class);
+		return modelMapper.map(dao.createUser(user), UserDto.class);
 	}
 
 	@Override

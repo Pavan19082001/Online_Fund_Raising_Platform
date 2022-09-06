@@ -13,27 +13,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bootcamp.funds.dto.DonationDto;
-import com.bootcamp.funds.service.DonationServiceImpl;
+import com.bootcamp.funds.service.DonationService;
 
 @RestController
-@RequestMapping("/post/{postId}")
+@RequestMapping("/donationapi/v1")
 public class DonationController {
 	
 	@Autowired
-	DonationServiceImpl donationService;
+	private DonationService donationService;
 	
-	@PostMapping("/donate")
+	@PostMapping("/donations/{postId}")
 	public ResponseEntity<DonationDto> makeDonation(@PathVariable Long postId, @RequestBody DonationDto dto){
 		DonationDto donationDto = donationService.donate(postId, dto);
 		return new ResponseEntity<DonationDto>(donationDto, HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/viewalldonations")
+	@GetMapping("/donations/{postId}")
 	public ResponseEntity<List<DonationDto>> showAllDonations(@PathVariable Long postId){
 		return new ResponseEntity<List<DonationDto>>(donationService.viewAllDonations(postId), HttpStatus.OK);
 	}
 	
-	@GetMapping("/donation/{donationId}")
+	@GetMapping("/donations/{donationId}/{postId}")
 	public ResponseEntity<DonationDto> viewDonationById(@PathVariable Long postId, @PathVariable Long donationId){
 		return new ResponseEntity<DonationDto>(donationService.viewDonation(postId, donationId), HttpStatus.OK);
 	}

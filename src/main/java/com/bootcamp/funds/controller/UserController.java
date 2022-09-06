@@ -16,26 +16,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bootcamp.funds.dto.UserDto;
 import com.bootcamp.funds.exceptions.UserNotFoundException;
-import com.bootcamp.funds.service.UserServiceImpl;
+import com.bootcamp.funds.service.UserService;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/userapi/v1")
 public class UserController {
 	
 	@Autowired
-	private UserServiceImpl userService;
+	private UserService userService;
 	
-	@GetMapping("/getallusers")
+	@GetMapping("/users")
 	public ResponseEntity<List<UserDto>> getAllUsers(){
 		return new ResponseEntity<List<UserDto>>(userService.showAllUsers(), HttpStatus.OK);
 	}
 	
-	@PostMapping("/add")
+	@PostMapping("/users")
 	public ResponseEntity<UserDto> createUser(@RequestBody UserDto user){
 		return new ResponseEntity<UserDto>(userService.addUser(user), HttpStatus.CREATED);
 	}
 	
-	@PutMapping("/{username}")
+	@PutMapping("/users/{username}")
 	public ResponseEntity<UserDto> updateUser(@PathVariable String username, @RequestBody UserDto user){
 		UserDto opt = userService.getUserByName(username);
 		if(opt == null) {
@@ -45,12 +45,12 @@ public class UserController {
 		return new ResponseEntity<UserDto>(u, HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/{username}")
+	@GetMapping("/users/{username}")
 	public ResponseEntity<UserDto> getUser(@PathVariable String username){
 		return new ResponseEntity<UserDto>(userService.getUserByName(username), HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/{username}")
+	@DeleteMapping("/users/{username}")
 	public ResponseEntity<UserDto> removeUser(@PathVariable String username){
 		userService.deleteUser(username);
 		return new ResponseEntity<UserDto>(HttpStatus.NO_CONTENT);

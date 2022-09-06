@@ -11,30 +11,32 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bootcamp.funds.dto.AdminDto;
 import com.bootcamp.funds.exceptions.AdminNotFoundException;
-import com.bootcamp.funds.service.AdminServiceImpl;
+import com.bootcamp.funds.service.AdminService;
 
 @RestController
+@RequestMapping("/adminapi/v1")
 public class AdminController {
 	
 	@Autowired
-	private AdminServiceImpl adminService;
+	private AdminService adminService;
 	
 	
-	@GetMapping("/getalladmins")
+	@GetMapping("/admins")
 	public ResponseEntity<List<AdminDto>> showAllAdmins(){
 		return new ResponseEntity<List<AdminDto>>(adminService.getAllAdmins(), HttpStatus.OK);
 	}
 	
-	@PostMapping("/admin")
+	@PostMapping("/admins")
 	public ResponseEntity<AdminDto> createAdmin(@RequestBody AdminDto admin){
 		return new ResponseEntity<AdminDto>(adminService.addAdmin(admin), HttpStatus.CREATED);
 	}
 	
-	@PutMapping("/admin/{adminname}")
+	@PutMapping("/admins/{adminname}")
 	public ResponseEntity<AdminDto> updateAdmin(@PathVariable String adminname, @RequestBody AdminDto admin){
 		AdminDto opt = adminService.getAdminByName(adminname);
 		if(opt == null) {
@@ -44,12 +46,12 @@ public class AdminController {
 		return new ResponseEntity<AdminDto>(u, HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/admin/{adminname}")
+	@GetMapping("/admins/{adminname}")
 	public ResponseEntity<AdminDto> getAdmin(@PathVariable String adminname){
 		return new ResponseEntity<AdminDto>(adminService.getAdminByName(adminname), HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/admin/{adminname}")
+	@DeleteMapping("/admins/{adminname}")
 	public ResponseEntity<AdminDto> removeAdmin(@PathVariable String adminname){
 		adminService.deleteAdmin(adminname);
 		return new ResponseEntity<AdminDto>(HttpStatus.NO_CONTENT);
