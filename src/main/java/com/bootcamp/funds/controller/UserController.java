@@ -2,6 +2,8 @@ package com.bootcamp.funds.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,16 +24,21 @@ import com.bootcamp.funds.service.UserService;
 @RequestMapping("/userapi/v1")
 public class UserController {
 	
+	Logger logger = LoggerFactory.getLogger(UserController.class);
+	
 	@Autowired
 	private UserService userService;
 	
 	@GetMapping("/users")
 	public ResponseEntity<List<UserDto>> getAllUsers(){
+		logger.info("UserController::getAllUsers::Entered");
 		return new ResponseEntity<List<UserDto>>(userService.showAllUsers(), HttpStatus.OK);
 	}
 	
 	@PostMapping("/users")
 	public ResponseEntity<UserDto> createUser(@RequestBody UserDto user){
+		logger.info("User "+user.getUsername()+" created successfully");
+		
 		return new ResponseEntity<UserDto>(userService.addUser(user), HttpStatus.CREATED);
 	}
 	
@@ -52,6 +59,7 @@ public class UserController {
 	
 	@DeleteMapping("/users/{username}")
 	public ResponseEntity<UserDto> removeUser(@PathVariable String username){
+		logger.error("User "+username+" is deleted");
 		userService.deleteUser(username);
 		return new ResponseEntity<UserDto>(HttpStatus.NO_CONTENT);
 	}

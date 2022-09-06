@@ -24,7 +24,7 @@ public class PostController {
 	@Autowired
 	private PostService postService;
 	
-	@PostMapping("/posts")
+	@PostMapping("/posts/{username}")
 	public ResponseEntity<PostDto> addPost(@PathVariable String username, @RequestBody PostDto dto){
 		PostDto postDto = postService.createPost(username, dto);
 		return new ResponseEntity<PostDto>(postDto, HttpStatus.CREATED);

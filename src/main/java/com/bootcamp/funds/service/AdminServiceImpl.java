@@ -11,28 +11,33 @@ import org.springframework.stereotype.Service;
 import com.bootcamp.funds.dto.AdminDto;
 import com.bootcamp.funds.exceptions.AdminNotFoundException;
 import com.bootcamp.funds.model.Admin;
+import com.bootcamp.funds.repository.AdminDao;
 import com.bootcamp.funds.repository.AdminRepository;
 
 @Service
 public class AdminServiceImpl implements AdminService {
-	
+
 	@Autowired
 	AdminRepository repo;
-	
+
 	@Autowired
 	ModelMapper modelMapper;
+
+	@Autowired
+	AdminDao dao;
 
 	@Override
 	public List<AdminDto> getAllAdmins() {
 		List<Admin> admins = repo.findAll();
-		List<AdminDto> adminDTO = admins.stream().map(admin -> modelMapper.map(admin, AdminDto.class)).collect(Collectors.toList());
+		List<AdminDto> adminDTO = admins.stream().map(admin -> modelMapper.map(admin, AdminDto.class))
+				.collect(Collectors.toList());
 		return adminDTO;
 	}
 
 	@Override
 	public AdminDto getAdminByName(String adminname) {
 		Optional<Admin> opt = repo.findAdminByName(adminname);
-		if(!opt.isPresent()) {
+		if (!opt.isPresent()) {
 			throw new AdminNotFoundException();
 		}
 		return modelMapper.map(opt.get(), AdminDto.class);
@@ -41,7 +46,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public AdminDto addAdmin(AdminDto dto) {
 		Admin admin = modelMapper.map(dto, Admin.class);
-		admin = repo.save(admin);
+		admin = dao.createAdmin(admin);
 		return modelMapper.map(admin, AdminDto.class);
 	}
 
@@ -54,12 +59,11 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public String deleteAdmin(String adminname) {
 		Optional<Admin> opt = repo.findAdminByName(adminname);
-		if(!opt.isPresent()) {
+		if (!opt.isPresent()) {
 			throw new AdminNotFoundException();
 		}
 		repo.deleteAdminByName(adminname);
-		return "Admin :: "+adminname+" is deleted successfully";
+		return "Admin :: " + adminname + " is deleted successfully";
 	}
-
 
 }

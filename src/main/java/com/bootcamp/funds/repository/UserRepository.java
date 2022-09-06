@@ -10,7 +10,7 @@ import com.bootcamp.funds.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-	
+
 	@Query("select u from User u where u.username=:username")
 	Optional<User> findUserByUserName(String username);
 }
